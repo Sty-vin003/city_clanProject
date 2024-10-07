@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>City Clan - Register</title>
+    <link rel="stylesheet" href="LRstyles.css">
+</head>
+<body>
+    <header>
+        <h1>Welcome to City Clan</h1>
+        <p>Your Smart City Feedback Platform</p>
+    </header>
+
+    <section class="register-section">
+        <h2>Register</h2>
+        <form id="registerForm">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit">Register</button>
+        </form>
+
+        <div id="registerMessage"></div>
+
+        <p>Already have an account? <a href="index.html">Login here</a></p>
+    </section>
+
+    <footer>
+        <p>City Clan &copy; 2024. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value; 
+
+            const response = await fetch('/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, email, password }),
+            });
+
+            const data = await response.json();
+            document.getElementById('registerMessage').innerText = data.message;
+        });
+    </script>
+</body>
+</html>

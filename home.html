@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>City Clan - Smart City Feedback Platform</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="main-header">
+        <nav class="navbar">
+            <div class="logo">City Clan</div>
+            
+            <ul class="nav-links">
+                <li><a href="#report-issue">Report Issue</a></li>
+                <li><a href="#vote-projects">Vote on Projects</a></li>
+                <li><a href="#neighborhood-dashboard">Neighborhood Dashboard</a></li>
+            </ul>
+        </nav>
+        <div class="user-info">
+            <!-- Placeholder for username -->
+        </div>
+    </header>
+
+    <section id="hero" class="hero-section">
+        <div class="hero-content">
+            <h1>Empowering Citizens to Improve Their Cities</h1>
+            <p>Report issues, vote on projects, and track improvements in your community.</p>
+            <a href="#report-issue" class="cta-button">View submitted Issues</a>
+        </div>
+    </section>
+
+    <section id="report-issue" class="report-section">
+        <h2>Report an Issue</h2>
+        <form class="report-form" method="post" action="/report-issue" enctype="multipart/form-data">
+            <label for="issue-type">Issue Type:</label>
+            <select id="issue-type" name="issuetype">
+                <option value="pothole">Pothole</option>
+                <option value="streetlight">Broken Streetlight</option>
+                <option value="garbage">Garbage Collection</option>
+                <option value="other">other..</option>
+            </select>
+        
+            <label for="description">Description:</label>
+            <textarea name="description" id="description" rows="4" placeholder="Describe the issue"></textarea>
+        
+            <label for="location">Location (optional):</label>
+            <input type="text" name="location" id="location" placeholder="Enter location">
+        
+            <label for="photo-upload">Upload Photo:</label>
+            <input type="file" name="photoupload" id="photo-upload">
+        
+            <button type="submit">Submit Issue</button>
+        </form>
+        
+    </section>
+
+    <section id="vote-projects" class="vote-section">
+        <section class="vote-section">
+            <h2>Vote for City Projects</h2>
+    
+            <form id="voteForm" class="vote-form">
+                <label for="projectSelect">Select Project to Vote For:</label>
+                <select id="projectSelect" name="projectName">
+                    <option value="New Park Development">New Park Development</option>
+                    <option value="Traffic Light Automation">Traffic Light Automation</option>
+                    <option value="Public Wi-Fi Expansion">Public Wi-Fi Expansion</option>
+                    <option value="Smart Waste Management">Smart Waste Management</option>
+                    <option value="Vote on whether to allocate funds for a new park in your neighborhood.">Vote on whether to allocate funds for a new park in your neighborhood.</option>
+                    <option value="Vote on a proposal to renovate Main Street.">Vote on a proposal to renovate Main Street.</option>
+                </select>
+                <button type="submit" class="vote-button">Vote Now</button>
+            </form>
+            <div id="voteMessage" class="vote-message"></div>
+        </section>
+    </section>
+
+    <section id="neighborhood-dashboard" class="dashboard-section">
+        <h2>Neighborhood Dashboard</h2>
+        <div class="dashboard-item">
+            <h3>Air Quality</h3>
+            <p>Moderate</p>
+        </div>
+
+        <div class="dashboard-item">
+            <h3>Traffic Congestion</h3>
+            <p>Heavy</p>
+        </div>
+
+        <div class="dashboard-item">
+            <h3>City Projects in Progress</h3>
+            <p>3 ongoing projects</p>
+        </div>
+    </section>
+
+    <footer class="main-footer">
+        <p>© 2024 City Clan. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+
+         // Fetch user information from server-side login response
+         window.addEventListener('DOMContentLoaded', async () => {
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, email, password}),
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+                // Update the username in the header
+                const userHeader = document.querySelector('.user-info');
+                userHeader.innerHTML = `<p>Welcome, ${data.username}!</p>`;
+            } else {
+                // Handle error scenario if needed
+                console.error('Login failed:', data.message);
+            }
+        });
+
+        
+        // Handle form submission
+        document.getElementById('voteForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const projectName = document.getElementById('projectSelect').value;
+
+            // Send vote to backend using Fetch API
+            const response = await fetch('/vote-project', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ projectName }),
+            });
+
+            const data = await response.json();
+            // Display message to user
+            const messageDiv = document.getElementById('voteMessage');
+            messageDiv.innerText = data.message;
+
+            // Automatically clear the message after 5 seconds (5000 ms)
+        setTimeout(() => {
+            messageDiv.innerText = '';
+        }, 3000);
+
+        });
+
+         
+    </script>
+
+</body>
+</html>

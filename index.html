@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>City Clan - Login</title>
+    <link rel="stylesheet" href="LRstyles.css">
+</head>
+<body>
+    <header>
+        <h1>Welcome to City Clan</h1>
+        <p>Your Smart City Feedback Platform</p>
+    </header>
+
+    <section class="login-section">
+        <h2>Login</h2>
+        <form id="loginForm">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit">Login</button>
+        </form>
+
+        <div id="loginMessage"></div>
+
+        <p>Don't have an account? <a href="register.html">Register here</a></p>
+    </section>
+
+    <footer>
+        <p>City Clan &copy; 2024. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            });
+
+            const data = await response.json();
+            if(response.ok){
+                window.location.href = '/home.html';
+            }
+            else{
+                document.getElementById('loginMessage').innerText = data.message;
+            }
+            
+        });
+    </script>
+</body>
+</html>
